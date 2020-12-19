@@ -1,6 +1,8 @@
 import json
 from flask import Blueprint, request
 from datetime import datetime
+from utils import json_serial
+
 from services.transactions import fetch_transactions, insert_transaction
 
 TRANSACTIONS = Blueprint('transactions', __name__)
@@ -11,7 +13,7 @@ def get_transactions():
     offset = request.args.get("offset")
     length = request.args.get("length")
     transactions = fetch_transactions(offset, length)
-    return json.dumps(transactions)
+    return json.dumps(transactions, default=json_serial)
 
 @TRANSACTIONS.route('/add', methods=['POST'])
 def add_transaction():
