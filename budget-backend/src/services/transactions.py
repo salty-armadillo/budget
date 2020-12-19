@@ -1,7 +1,7 @@
 from mysql import connector
 import configparser
 
-def conn_transactions_table():
+def fetch_transactions(offset, length):
     config = configparser.ConfigParser()
     config.read('config.ini')
 
@@ -14,25 +14,36 @@ def conn_transactions_table():
 
     dbCursor = db.cursor()
 
-    return dbCursor
-
-def get_transactions(offset, length):
-    dbCursor = conn_transactions_table()
-
     dbCursor.execute(
-        f"SELECT * FROM transactions ORDER BY create_time DESC OFFSET {offset} rows FETCH NEXT {length} ROWS ONLY;"
+        f"SELECT * FROM transactions ORDER BY create_time DESC LIMIT {offset}, {length};"
     )
 
     results = dbCursor.fetchall()
 
+    dbCursor.close()
+    db.close()
+
     return results
 
-def add_transaction(create_time, value, description):
-    dbCursor = conn_transactions_table()
+def insert_transaction(create_time, value, description):
+    config = configparser.ConfigParser()
+    config.read('config.ini')
 
-    dbCursor.exectute(
-        f"INSERT INTO transactions (create_time, value, description) VALUES ({create_time}, {value}, {description});"
+    db = connector.connect(
+        host="localhost",
+        user=config["database"]["username"],
+        password=config["database"]["password"],
+        database='budgeting_db'
     )
 
-    dbCursor.commit()
+    dbCursor = db.cursor()
+    print(value)
+    dbCursor.execute(
+        f"INSERT INTO transactions (create_time, value, description) VALUES ('{create_time}', {value}, '{description}');"
+    )
+
+    db.commit()
+    dbCursor.close()
+    db.close()
+
     return

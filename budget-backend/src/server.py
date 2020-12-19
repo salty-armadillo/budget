@@ -4,9 +4,11 @@ from flask import Flask
 from flask_cors import CORS
 from json import dumps
 from mysql import connector
+from routes.transactions import TRANSACTIONS
 
 def default_handler(err):
     '''Default handler'''
+    print(err)
     response = err.get_response()
     print('response', err, err.get_response())
     response.data = dumps({
@@ -22,6 +24,7 @@ CORS(APP)
 
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, default_handler)
+APP.register_blueprint(TRANSACTIONS, url_prefix='/transactions')
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -34,20 +37,20 @@ db = connector.connect(
 dbCursor = db.cursor()
 
 try:
-    dbCursor.execute("USE 'budgeting_db';")
+    dbCursor.execute("USE budgeting_db;")
 except connector.Error as err:
     if err.errno == connector.errorcode.ER_ACCESS_DENIED_ERROR:
         print("Access denied.")
     elif err.errno == connector.errorcode.ER_BAD_DB_ERROR:
         dbCursor.execute("CREATE DATABASE budgeting_db;")
-        db.database('budgeting_db')
+        dbCursor.execute("USE budgeting_db;")
     else:
         print(err)
 
-with open('src/database/createDB.sql', 'r') as f:
+with open('database/createDB.sql', 'r') as f:
     with dbCursor:
         dbCursor.execute(f.read(), multi=True)
-    dbCursor.commit()
+    db.commit()
 
 dbCursor.close()
 
