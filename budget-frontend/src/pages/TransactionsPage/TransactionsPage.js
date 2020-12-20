@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -25,8 +26,24 @@ export class TransactionsPage extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.getTransactionData();
+    }
+
     getTransactionData = () => {
-        
+        const { page } = this.state;
+
+        const url = `http://localhost:5000/transactions/fetch?offset=${page*this.defaultPageSize}&length=${this.defaultPageSize}`
+
+        axios.get(url)
+            .then((response) => {
+                this.setState({
+                    data: response.data
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     render() {
