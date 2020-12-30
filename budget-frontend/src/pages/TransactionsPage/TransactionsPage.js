@@ -5,11 +5,9 @@ import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 
 import { DataTable } from '../../components/DataTable';
+import { Banner } from '../../components/Banner';
 
 const styles = () => ({
-    loginButton: {
-        float: 'right'
-    }
 });
 
 export class TransactionsPage extends React.Component {
@@ -52,6 +50,7 @@ export class TransactionsPage extends React.Component {
 
         return (
             <React.Fragment>
+                <Banner />
                 <DataTable
                     columns={this.headings}
                     data={data}
