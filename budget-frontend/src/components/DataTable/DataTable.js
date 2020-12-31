@@ -10,7 +10,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-const styles = () => ({});
+const styles = () => ({
+    table: {
+        margin: '1rem',
+        width: 'auto'
+    }
+});
 
 export class DataTable extends React.Component {
 
@@ -24,8 +29,8 @@ export class DataTable extends React.Component {
         const { classes, columns, data } = this.props;
 
         return (
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
+            <TableContainer className={classes.table} component={Paper}>
+                <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             { columns.map((column) => {

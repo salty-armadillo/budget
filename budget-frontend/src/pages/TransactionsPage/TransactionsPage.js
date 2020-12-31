@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { DataTable } from '../../components/DataTable';
 import { Banner } from '../../components/Banner';
 
-const styles = () => ({
+const styles = (theme) => ({
 });
 
 export class TransactionsPage extends React.Component {
@@ -31,17 +31,19 @@ export class TransactionsPage extends React.Component {
     getTransactionData = () => {
         const { page } = this.state;
 
-        const url = `http://localhost:5000/transactions/fetch?offset=${page*this.defaultPageSize}&length=${this.defaultPageSize}`
+        const url = `http://localhost:5000/transactions/fetch?offset=${page*this.defaultPageSize}&length=${this.defaultPageSize}`;
 
-        axios.get(url)
-            .then((response) => {
-                this.setState({
-                    data: response.data
+        return (
+            axios.get(url)
+                .then((response) => {
+                    this.setState({
+                        data: response.data
+                    })
                 })
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+                .catch((error) => {
+                    console.log(error);
+                })
+        )
     }
 
     render() {
@@ -50,7 +52,9 @@ export class TransactionsPage extends React.Component {
 
         return (
             <React.Fragment>
-                <Banner />
+                <Banner
+                    fetchTransactions={this.getTransactionData}
+                />
                 <DataTable
                     columns={this.headings}
                     data={data}

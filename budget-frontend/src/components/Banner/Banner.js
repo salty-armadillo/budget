@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import axios from 'axios';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -19,6 +20,8 @@ import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = (theme) => ({
     banner: {
@@ -36,6 +39,9 @@ const styles = (theme) => ({
     },
     dialog: {
         padding: '0.5em'
+    },
+    error: {
+        backgroundColor: theme.palette.error.main
     }
 });
 
@@ -48,7 +54,9 @@ export class Banner extends React.Component {
             isAddTransactionOpen: false,
             transactionValue: '',
             date: moment(),
-            description: ''
+            description: '',
+            addTransactionError: false,
+            isAddTransactionLoading: false
         };
     }
 
@@ -56,15 +64,61 @@ export class Banner extends React.Component {
         this.setState({ isAddTransactionOpen: !this.state.isAddTransactionOpen });
     }
 
-    handleChange = (field) => (value) => {
+    handleChange = (field) => (e) => {
         this.setState({
-            [field]: value
+            [field]: e.target.value
         })
+    }
+
+    addTransaction = () => {
+        const { fetchTransactions } = this.props;
+        const { date, transactionValue, description } = this.state;
+
+        this.setState({ isAddTransactionLoading: true });
+
+        const payload = {
+            date: moment(date).format('YYYY-MM-DD HH:mm:ss'),
+            value: transactionValue,
+            description: description
+        }
+
+        const url = "http://localhost:5000/transactions/add";
+
+        return (
+            axios
+                .post(url, payload)
+                .then(() => {
+                    this.setState({
+                        date: moment(),
+                        transactionValue: '',
+                        description: '',
+                        isAddTransactionOpen: false
+                    }, fetchTransactions)
+                })
+                .catch(() => {
+                    this.setState({
+                        addTransactionError: true
+                    })
+                })
+                .finally(() => {
+                    this.setState({
+                        isAddTransactionLoading: false
+                    })
+                })
+        )
+
     }
 
     render() {
         const { classes } = this.props;
-        const { isAddTransactionOpen, transactionValue, date, description } = this.state;
+        const {
+            isAddTransactionOpen,
+            transactionValue,
+            date,
+            description,
+            addTransactionError,
+            isAddTransactionLoading
+        } = this.state;
 
         return (
             <React.Fragment>
@@ -119,14 +173,30 @@ export class Banner extends React.Component {
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button>
+                        <Button disabled={isAddTransactionLoading}>
                             Cancel
                         </Button>
-                        <Button color='primary'>
-                            Add
-                        </Button>
+                        { isAddTransactionLoading 
+                            ? (
+                                <CircularProgress size={'1rem'} />
+                            ) : (
+                                <Button color='primary' onClick={this.addTransaction}>
+                                    Add
+                                </Button>
+                            )
+                        }
                     </DialogActions>
                 </Dialog>
+                <Snackbar
+                    ContentProps={{
+                        classes: { root: classes.error }
+                    }}
+                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                    open={addTransactionError}
+                    onClose={() => { this.setState({ addTransactionError: false })}}
+                    message="An error has occurred whilst adding a transaction. Please try again."
+                    autoHideDuration={2000}
+                />
             </React.Fragment>
         )
     }
@@ -134,7 +204,8 @@ export class Banner extends React.Component {
 }
 
 Banner.propTypes = {
-    classes: PropTypes.object
+    classes: PropTypes.object,
+    fetchTransactions: PropTypes.func.isRequired
 }
 
 Banner.defaultProps = {
