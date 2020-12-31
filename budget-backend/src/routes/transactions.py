@@ -1,6 +1,5 @@
 import json
 from flask import Blueprint, request
-from datetime import datetime
 from utils import json_serial
 
 from services.transactions import fetch_transactions, insert_transaction
@@ -19,7 +18,8 @@ def get_transactions():
 def add_transaction():
     '''Add transaction'''
     payload = request.get_json()
+    date = payload["date"]
     value = float(payload["value"])
     description = payload["description"]
-    insert_transaction(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), value, description)
+    insert_transaction(date, value, description)
     return json.dumps({})
