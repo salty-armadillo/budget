@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { DataTable } from '../../components/DataTable';
 import { Banner } from '../../components/Banner';
 
-const styles = (theme) => ({
+const styles = () => ({
 });
 
 export class TransactionsPage extends React.Component {

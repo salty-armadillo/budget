@@ -25,14 +25,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = (theme) => ({
     banner: {
-        height: '5em',
+        height: '6em',
         backgroundColor: theme.palette.primary.light
     },
     grid: {
         height: '100%'
     },
     button: {
-        backgroundColor: theme.palette.secondary.main,
+        backgroundColor: "#ffffff",
         '&:hover': {
             backgroundColor: theme.palette.secondary.light
         }
@@ -129,7 +129,7 @@ export class Banner extends React.Component {
                         </Grid>
                         <Grid item container xs={4} direction='column' justify='center' alignContent='center'>
                             <IconButton className={classes.button} onClick={this.toggleAddTransaction}>
-                                <PaymentIcon />
+                                <PaymentIcon fontSize={'large'}/>
                             </IconButton>
                         </Grid>
                         <Grid item xs={4}>
@@ -173,7 +173,7 @@ export class Banner extends React.Component {
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button disabled={isAddTransactionLoading}>
+                        <Button disabled={isAddTransactionLoading} onClick={this.toggleAddTransaction}>
                             Cancel
                         </Button>
                         { isAddTransactionLoading 

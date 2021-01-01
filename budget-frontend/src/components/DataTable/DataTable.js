@@ -35,23 +35,33 @@ export class DataTable extends React.Component {
                         <TableRow>
                             { columns.map((column) => {
                                 return ( 
-                                    <TableCell>{column}</TableCell>
+                                    <TableCell align={'center'}>{column}</TableCell>
                                 )
                             })}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    { data.map((row) => {
-                        return (
-                            <TableRow key={row.name}>
-                            { row.map((item) => {
+                    { data.length > 0 
+                        ? (
+                            data.map((row) => {
                                 return (
-                                    <TableCell>{item}</TableCell>
+                                    <TableRow key={row.name}>
+                                    { row.map((item) => {
+                                        return (
+                                            <TableCell>{item}</TableCell>
+                                        )
+                                    }) }
+                                    </TableRow>
                                 )
-                            }) }
+                            })
+                        ) : (
+                            <TableRow key='no-data-row'>
+                                <TableCell colSpan={3} align={'center'}>
+                                    No data available.
+                                </TableCell>
                             </TableRow>
                         )
-                    }) }
+                    }
                     </TableBody>
                 </Table>
             </TableContainer>

@@ -7,8 +7,30 @@ import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+import Divider from '@material-ui/core/Divider';
 
-const styles = () => ({});
+const styles = (theme) => ({
+    drawer: {
+        width: '10em'
+    },
+    menuItem: {
+        padding: '1em',
+        '&:hover': {
+            backgroundColor: theme.palette.secondary.light
+        }
+    },
+    closeButton: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        paddingTop: '0',
+        paddingRight: '0.25rem',
+        '&:hover': {
+            backgroundColor: "#ffffff"
+        }
+    }
+});
 
 export class MenuDrawer extends React.Component {
 
@@ -24,7 +46,13 @@ export class MenuDrawer extends React.Component {
         return (
             <Drawer classes={{ paper: classes.drawer }} open={isMenuOpen} onClose={toggleMenu} transitionDuration={200}>
                 <MenuList className={classes.menu}>
-                    <MenuItem component={Link} to="/transactions" onClick={toggleMenu}>
+                    <MenuItem className={classes.closeButton}>
+                        <IconButton onClick={toggleMenu}>
+                            <CloseIcon fontSize={'small'}/>
+                        </IconButton>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem className={classes.menuItem} component={Link} to="/transactions" onClick={toggleMenu}>
                         Transactions
                     </MenuItem>
                 </MenuList>
