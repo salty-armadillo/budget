@@ -4,3 +4,9 @@ CREATE TABLE IF NOT EXISTS transactions (
     description VARCHAR(255),
     category VARCHAR(255)
 )
+
+CREATE TABLE IF NOT EXISTS budget_goals (
+    create_time DATETIME,
+    goals NVARCHAR(MAX),
+    timeframe VARCHAR(255)
+)

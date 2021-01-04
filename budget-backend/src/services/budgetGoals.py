@@ -1,7 +1,7 @@
 from mysql import connector
 import configparser
 
-def fetch_transactions(offset, length):
+def fetch_budget_goals(timeframe, offset, length):
     config = configparser.ConfigParser()
     config.read('config.ini')
 
@@ -15,7 +15,7 @@ def fetch_transactions(offset, length):
     dbCursor = db.cursor()
 
     dbCursor.execute(
-        f"SELECT * FROM transactions ORDER BY create_time DESC LIMIT {offset}, {length};"
+        f"SELECT * FROM budget_goals WHERE timeframe = '{timeframe}' ORDER BY create_time DESC LIMIT {offset}, {length};"
     )
 
     results = dbCursor.fetchall()
@@ -25,7 +25,7 @@ def fetch_transactions(offset, length):
 
     return results
 
-def insert_transaction(create_time, value, description, category):
+def add_budget_goals(create_time, goals, timeframe):
     config = configparser.ConfigParser()
     config.read('config.ini')
 
@@ -39,7 +39,7 @@ def insert_transaction(create_time, value, description, category):
     dbCursor = db.cursor()
 
     dbCursor.execute(
-        f"INSERT INTO transactions (create_time, value, description, category) VALUES ('{create_time}', {value}, '{description}', '{category}');"
+        f"INSERT INTO budget_goals (create_time, goals, timeframe) VALUES ('{create_time}', {goals}, '{timeframe}');"
     )
 
     db.commit()
