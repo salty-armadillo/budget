@@ -21,5 +21,6 @@ def add_transaction():
     date = payload["date"]
     value = float(payload["value"])
     description = payload["description"]
+    category = payload["category"]
     insert_transaction(date, value, description)
     return json.dumps({})
