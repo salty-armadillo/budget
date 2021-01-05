@@ -13,7 +13,7 @@ def get_transactions():
     length = request.args.get("length")
     transactions = fetch_transactions(offset, length)
 
-    transactions_keys = ["date", "value", "description", "category"]
+    transactions_keys = ["date", "amount", "description", "category"]
     transactions_values = fetch_transactions(offset, length)
     transactions = [dict(zip(transactions_keys, i)) for i in transactions_values]
 
@@ -24,8 +24,8 @@ def add_transaction():
     '''Add transaction'''
     payload = request.get_json()
     date = payload["date"]
-    value = float(payload["value"])
+    amount = float(payload["amount"])
     description = payload["description"]
     category = payload["category"]
-    insert_transaction(date, value, description, category)
+    insert_transaction(date, amount, description, category)
     return json.dumps({})

@@ -25,7 +25,7 @@ def fetch_transactions(offset, length):
 
     return results
 
-def insert_transaction(create_time, value, description, category):
+def insert_transaction(create_time, amount, description, category):
     config = configparser.ConfigParser()
     config.read('config.ini')
 
@@ -39,7 +39,7 @@ def insert_transaction(create_time, value, description, category):
     dbCursor = db.cursor()
 
     dbCursor.execute(
-        f"INSERT INTO transactions (create_time, value, description, category) VALUES ('{create_time}', {value}, '{description}', '{category}');"
+        f"INSERT INTO transactions (create_time, amount, description, category) VALUES ('{create_time}', {amount}, '{description}', '{category}');"
     )
 
     db.commit()
