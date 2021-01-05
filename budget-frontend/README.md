@@ -10,6 +10,12 @@ React-based frontend project for the main Budget application. Helping the user t
 
 <br/>
 
+## Current features
+* Adding a new transaction
+* Viewing all past transactions and their details
+
+<br/>
+
 ## Technical specifications
 * Javascript (ES8+)
 * React
@@ -22,9 +28,3 @@ React-based frontend project for the main Budget application. Helping the user t
 npm install
 npm start
 ```
-
-<br/>
-
-## Current features
-* Adding a new transaction
-* Viewing all past transactions and their details

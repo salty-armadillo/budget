@@ -7,6 +7,17 @@ Backend Flask server for the main Budget application. Helping the user to track 
 | Version | Date | Description |
 |---------|------|-------------|
 |   v1.0  | December 2020 | MVP - transaction recording and viewing |
+|   v1.1  | January 2021 | Goal adding and retrieving |
+
+<br/>
+
+## Current features
+* Adding a new transaction to the database
+* Fetching a list of past transactions
+    * Includes pagination - offset and length
+* Adding a new set of goals to the database
+    * Able to set different goals for different timeframes - e.g. weekly, monthly, overall etc.
+* Fetching a list of past and current goals for a given timeframe
 
 <br/>
 
@@ -21,10 +32,3 @@ Backend Flask server for the main Budget application. Helping the user to track 
 ```
 flask run
 ```
-
-<br/>
-
-## Current features
-* Adding a new transaction to the database
-* Fetching a list of past transactions
-    * Includes pagination - offset and length
