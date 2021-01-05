@@ -5,6 +5,7 @@ from flask_cors import CORS
 from json import dumps
 from mysql import connector
 from routes.transactions import TRANSACTIONS
+from routes.budgetGoals import BUDGET_GOALS
 
 def default_handler(err):
     '''Default handler'''
@@ -25,6 +26,7 @@ CORS(APP)
 APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, default_handler)
 APP.register_blueprint(TRANSACTIONS, url_prefix='/transactions')
+APP.register_blueprint(BUDGET_GOALS, url_prefix='/budgetgoals')
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -50,7 +52,6 @@ except connector.Error as err:
 with open('database/createDB.sql', 'r') as f:
     with dbCursor:
         dbCursor.execute(f.read(), multi=True)
-    db.commit()
 
 dbCursor.close()
 

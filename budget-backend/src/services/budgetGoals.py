@@ -39,7 +39,7 @@ def add_budget_goals(create_time, goals, timeframe):
     dbCursor = db.cursor()
 
     dbCursor.execute(
-        f"INSERT INTO budget_goals (create_time, goals, timeframe) VALUES ('{create_time}', {goals}, '{timeframe}');"
+        f"INSERT INTO budget_goals (create_time, goals, timeframe) VALUES ('{create_time}', '{goals}', '{timeframe}');"
     )
 
     db.commit()
