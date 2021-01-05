@@ -14,8 +14,12 @@ def get_transactions():
     timeframe = request.args.get("timeframe")
     offset = request.args.get("offset")
     length = request.args.get("length")
-    transactions = fetch_budget_goals(timeframe, offset, length)
-    return json.dumps(transactions, default=json_serial)
+
+    goals_keys = ["date", "goals", "timeframe"]
+    goals_values = fetch_budget_goals(timeframe, offset, length)
+    goals = [dict(zip(goals_keys, i)) for i in goals_values]
+
+    return json.dumps(goals, default=json_serial)
 
 @BUDGET_GOALS.route('/add', methods=['POST'])
 def add_transaction():

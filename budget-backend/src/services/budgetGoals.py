@@ -18,7 +18,7 @@ def fetch_budget_goals(timeframe, offset, length):
         f"SELECT * FROM budget_goals WHERE timeframe = '{timeframe}' ORDER BY create_time DESC LIMIT {offset}, {length};"
     )
 
-    results = dbCursor.fetchall()
+    results = [list(i) for i in dbCursor.fetchall()]
 
     dbCursor.close()
     db.close()

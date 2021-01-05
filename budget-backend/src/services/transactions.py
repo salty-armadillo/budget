@@ -18,7 +18,7 @@ def fetch_transactions(offset, length):
         f"SELECT * FROM transactions ORDER BY create_time DESC LIMIT {offset}, {length};"
     )
 
-    results = dbCursor.fetchall()
+    results = [list(i) for i in dbCursor.fetchall()]
 
     dbCursor.close()
     db.close()

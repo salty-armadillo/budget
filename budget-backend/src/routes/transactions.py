@@ -12,6 +12,11 @@ def get_transactions():
     offset = request.args.get("offset")
     length = request.args.get("length")
     transactions = fetch_transactions(offset, length)
+
+    transactions_keys = ["date", "value", "description", "category"]
+    transactions_values = fetch_transactions(offset, length)
+    transactions = [dict(zip(transactions_keys, i)) for i in transactions_values]
+
     return json.dumps(transactions, default=json_serial)
 
 @TRANSACTIONS.route('/add', methods=['POST'])
@@ -22,5 +27,5 @@ def add_transaction():
     value = float(payload["value"])
     description = payload["description"]
     category = payload["category"]
-    insert_transaction(date, value, description)
+    insert_transaction(date, value, description, category)
     return json.dumps({})
