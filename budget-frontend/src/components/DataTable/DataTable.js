@@ -46,9 +46,9 @@ export class DataTable extends React.Component {
                             data.map((row) => {
                                 return (
                                     <TableRow key={row.name}>
-                                    { row.map((item) => {
+                                    { columns.map((column) => {
                                         return (
-                                            <TableCell>{item}</TableCell>
+                                            <TableCell>{row[column]}</TableCell>
                                         )
                                     }) }
                                     </TableRow>

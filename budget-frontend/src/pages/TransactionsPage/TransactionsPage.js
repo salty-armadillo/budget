@@ -16,7 +16,7 @@ export class TransactionsPage extends React.Component {
         super(props);
 
         this.defaultPageSize = 10;
-        this.headings = ["Date", "Amount", "Description"];
+        this.headings = ["Date", "Amount", "Description", "Category"];
 
         this.state = {
             page: 0,
