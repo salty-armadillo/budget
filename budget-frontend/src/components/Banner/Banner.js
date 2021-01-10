@@ -217,11 +217,12 @@ export class Banner extends React.Component {
 
 Banner.propTypes = {
     classes: PropTypes.object,
-    fetchTransactions: PropTypes.func.isRequired
+    fetchTransactions: PropTypes.func
 }
 
 Banner.defaultProps = {
-    classes: {}
+    classes: {},
+    fetchTransactions: () => {}
 }
 
 export default withStyles(styles)(Banner);

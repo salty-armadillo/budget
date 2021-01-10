@@ -10,10 +10,6 @@ import { DataTable } from '../../components/DataTable';
 import { Banner } from '../../components/Banner';
 
 const styles = (theme) => ({
-    title: {
-        height: '3rem',
-        backgroundColor: theme.palette.primary.light
-    },
     overlap: {
         height: '3rem',
         backgroundColor: theme.palette.primary.light

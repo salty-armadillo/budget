@@ -4,8 +4,25 @@ import axios from 'axios';
 
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = () => ({
+import { Banner } from '../../components/Banner';
 
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+
+const styles = (theme) => ({
+    overlap: {
+        height: '3rem',
+        backgroundColor: theme.palette.primary.light
+    },
+    paperGrid: {
+        position: 'absolute',
+        marginTop: '-3rem',
+        width: '100%'
+    },
+    paper: {
+        width: '90%',
+        margin: 'auto'
+    }
 })
 
 export class BudgetsPage extends React.Component {
@@ -16,8 +33,31 @@ export class BudgetsPage extends React.Component {
         this.state = {}
     }
 
+    componentDidMount() {
+        this.getBudgetData();
+    }
+
+    getBudgetData = () => {
+
+    }
+
     render() {
-        return {}
+        const { classes } = this.props;
+        const { data } = this.state;
+
+        return (
+            <React.Fragment>
+                <Banner
+                    fetchBudgetData={this.getBudgetData}
+                />
+                <Grid className={classes.overlap} container />
+                <Grid className={classes.paperGrid}>
+                    <Paper className={classes.paper}>
+                        
+                    </Paper>
+                </Grid>
+            </React.Fragment>
+        )
     }
 
 

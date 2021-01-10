@@ -33,7 +33,7 @@ function App() {
 							<Route exact path="/">
 								<Redirect to="/transactions"/>
 							</Route>
-							<Route path="/budget" component={BudgetsPage} />
+							<Route path="/budgets" component={BudgetsPage} />
 							<Route path="/transactions" component={TransactionsPage} />
 						</Switch>
 					</MuiPickersUtilsProvider>
