@@ -4,10 +4,21 @@ import axios from 'axios';
 
 import { withStyles } from '@material-ui/core/styles';
 
+import Grid from '@material-ui/core/Grid';
+
 import { DataTable } from '../../components/DataTable';
 import { Banner } from '../../components/Banner';
 
-const styles = () => ({
+const styles = (theme) => ({
+    overlap: {
+        height: '3rem',
+        backgroundColor: theme.palette.primary.light
+    },
+    table: {
+        position: 'absolute',
+        marginTop: '-3rem',
+        width: '100%'
+    }
 });
 
 export class TransactionsPage extends React.Component {
@@ -55,10 +66,13 @@ export class TransactionsPage extends React.Component {
                 <Banner
                     fetchTransactions={this.getTransactionData}
                 />
-                <DataTable
-                    columns={this.headings}
-                    data={data}
-                />
+                <Grid className={classes.overlap} container />
+                <Grid className={classes.table}>
+                    <DataTable
+                        columns={this.headings}
+                        data={data}
+                    />
+                </Grid>
             </React.Fragment>
         )
     }

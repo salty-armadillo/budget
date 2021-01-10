@@ -12,8 +12,8 @@ import Paper from '@material-ui/core/Paper';
 
 const styles = () => ({
     table: {
-        margin: '1rem',
-        width: 'auto'
+        width: '90%',
+        margin: 'auto'
     }
 });
 
@@ -56,7 +56,7 @@ export class DataTable extends React.Component {
                             })
                         ) : (
                             <TableRow key='no-data-row'>
-                                <TableCell colSpan={3} align={'center'}>
+                                <TableCell colSpan={columns.length} align={'center'}>
                                     No data available.
                                 </TableCell>
                             </TableRow>
