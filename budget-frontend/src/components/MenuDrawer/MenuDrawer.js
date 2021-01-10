@@ -52,6 +52,9 @@ export class MenuDrawer extends React.Component {
                         </IconButton>
                     </MenuItem>
                     <Divider />
+                    <MenuItem className={classes.menuItem} component={Link} to="/budgets" onClick={toggleMenu}>
+                        Budgets
+                    </MenuItem>
                     <MenuItem className={classes.menuItem} component={Link} to="/transactions" onClick={toggleMenu}>
                         Transactions
                     </MenuItem>

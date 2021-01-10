@@ -55,6 +55,7 @@ export class Banner extends React.Component {
             transactionValue: '',
             date: moment(),
             description: '',
+            category: '',
             addTransactionError: false,
             isAddTransactionLoading: false
         };
@@ -72,14 +73,15 @@ export class Banner extends React.Component {
 
     addTransaction = () => {
         const { fetchTransactions } = this.props;
-        const { date, transactionValue, description } = this.state;
+        const { date, transactionValue, description, category } = this.state;
 
         this.setState({ isAddTransactionLoading: true });
 
         const payload = {
             date: moment(date).format('YYYY-MM-DD HH:mm:ss'),
-            value: transactionValue,
-            description: description
+            amount: transactionValue,
+            description: description,
+            category: category
         }
 
         const url = "http://localhost:5000/transactions/add";
@@ -92,6 +94,7 @@ export class Banner extends React.Component {
                         date: moment(),
                         transactionValue: '',
                         description: '',
+                        category: '',
                         isAddTransactionOpen: false
                     }, fetchTransactions)
                 })
@@ -116,6 +119,7 @@ export class Banner extends React.Component {
             transactionValue,
             date,
             description,
+            category,
             addTransactionError,
             isAddTransactionLoading
         } = this.state;
@@ -162,12 +166,20 @@ export class Banner extends React.Component {
                                     </FormControl>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={6}>
                                 <TextField
                                     label="Description"
                                     fullWidth
                                     value={description}
                                     onChange={this.handleChange('description')}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    label="Category"
+                                    fullWidth
+                                    value={category}
+                                    onChange={this.handleChange('category')}
                                 />
                             </Grid>
                         </Grid>

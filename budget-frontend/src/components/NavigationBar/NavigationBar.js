@@ -39,7 +39,7 @@ export class NavigationBar extends React.Component {
 
         return (
             <React.Fragment>
-                <AppBar position="static">
+                <AppBar position="static" elevation={0}>
                     <Toolbar>
                         <IconButton 
                             edge="start" 
@@ -51,7 +51,7 @@ export class NavigationBar extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            Transactions
+                            
                         </Typography>
                         <Grid container justify={'flex-end'}>
                             <Button 

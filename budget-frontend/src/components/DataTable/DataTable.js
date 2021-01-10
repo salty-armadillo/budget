@@ -9,11 +9,15 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
-const styles = () => ({
+const styles = (theme) => ({
     table: {
         width: '90%',
         margin: 'auto'
+    },
+    title: {
+        color: theme.palette.secondary.dark
     }
 });
 
@@ -33,9 +37,14 @@ export class DataTable extends React.Component {
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
+                            <TableCell colSpan={columns.length} align='left'>
+                                <Typography className={classes.title} variant='h6'>Transactions</Typography>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
                             { columns.map((column) => {
                                 return ( 
-                                    <TableCell align={'center'}>{column}</TableCell>
+                                    <TableCell >{column}</TableCell>
                                 )
                             })}
                         </TableRow>
@@ -48,7 +57,7 @@ export class DataTable extends React.Component {
                                     <TableRow key={row.name}>
                                     { columns.map((column) => {
                                         return (
-                                            <TableCell>{row[column]}</TableCell>
+                                            <TableCell>{row[column.toLowerCase()]}</TableCell>
                                         )
                                     }) }
                                     </TableRow>
