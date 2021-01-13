@@ -1,7 +1,7 @@
 from mysql import connector
 import configparser
 
-def fetch_budget_goals(timeframe, offset, length):
+def fetch_budget_goals(timeframe, start, end):
     config = configparser.ConfigParser()
     config.read('config.ini')
 
@@ -15,7 +15,7 @@ def fetch_budget_goals(timeframe, offset, length):
     dbCursor = db.cursor()
 
     dbCursor.execute(
-        f"SELECT * FROM budget_goals WHERE timeframe = '{timeframe}' ORDER BY create_time DESC LIMIT {offset}, {length};"
+        f"SELECT * FROM budget_goals WHERE timeframe = '{timeframe}' AND create_time BETWEEN '{start}' AND '{end}';"
     )
 
     results = [list(i) for i in dbCursor.fetchall()]

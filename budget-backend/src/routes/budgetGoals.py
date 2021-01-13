@@ -12,11 +12,11 @@ BUDGET_GOALS = Blueprint('budgetgoals', __name__)
 def get_transactions():
     '''Get list of transactions - ordered by create time'''
     timeframe = request.args.get("timeframe")
-    offset = request.args.get("offset")
-    length = request.args.get("length")
+    start = request.args.get("start")
+    end = request.args.get("end")
 
     goals_keys = ["date", "goals", "timeframe"]
-    goals_values = fetch_budget_goals(timeframe, offset, length)
+    goals_values = fetch_budget_goals(timeframe, start, end)
     goals = [dict(zip(goals_keys, i)) for i in goals_values]
 
     return json.dumps(goals, default=json_serial)
