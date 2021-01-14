@@ -11,6 +11,9 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Box from '@material-ui/core/Box';
 
 const styles = (theme) => ({
     overlap: {
@@ -30,7 +33,12 @@ const styles = (theme) => ({
         color: theme.palette.secondary.dark,
         textAlign: 'left',
         padding: '1rem'
-    }
+    },
+    categoryCard: {
+        width: '80%',
+        margin: '2.5rem 1rem 1rem 1rem'
+    },
+    box: {}
 })
 
 export class BudgetsPage extends React.Component {
@@ -91,9 +99,13 @@ export class BudgetsPage extends React.Component {
                         <Grid container spacing={2}>
                             { Object.keys(data).map((category) => {
                                 return (
-                                    <Grid item container xs={4} direction='column' justify='center' alignContent='center'>
-                                        <Typography variant='h4'>{category}</Typography>
-                                        <Typography>{data[category]}</Typography>
+                                    <Grid item container xs={6} sm={4}>
+                                        <Card className={classes.categoryCard}>
+                                            <CardContent>
+                                                <Typography variant='h2'>{data[category]}</Typography>
+                                                <Typography>{category}</Typography>
+                                            </CardContent>
+                                        </Card>
                                     </Grid>
                                 )
                             })}
