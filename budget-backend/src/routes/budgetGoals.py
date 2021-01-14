@@ -10,7 +10,7 @@ BUDGET_GOALS = Blueprint('budgetgoals', __name__)
 
 @BUDGET_GOALS.route('/fetch', methods=['GET'])
 def get_transactions():
-    '''Get list of transactions - ordered by create time'''
+    '''Get list of budget - ordered by create time'''
     timeframe = request.args.get("timeframe")
     start = request.args.get("start")
     end = request.args.get("end")
@@ -23,7 +23,7 @@ def get_transactions():
 
 @BUDGET_GOALS.route('/add', methods=['POST'])
 def add_transaction():
-    '''Add transaction'''
+    '''Add budget goal'''
     jsonSchema = {}
 
     payload = request.get_json()
