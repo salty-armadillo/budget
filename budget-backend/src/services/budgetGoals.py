@@ -15,7 +15,7 @@ def fetch_budget_goals(timeframe, start, end):
     dbCursor = db.cursor()
 
     dbCursor.execute(
-        f"SELECT * FROM budget_goals WHERE timeframe = '{timeframe}' AND create_time BETWEEN '{start}' AND '{end}';"
+        f"SELECT * FROM budget_goals WHERE timeframe = '{timeframe}' AND create_time BETWEEN '{start}' AND '{end}' ORDER BY create_time DESC;"
     )
 
     results = [list(i) for i in dbCursor.fetchall()]
