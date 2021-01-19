@@ -17,6 +17,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Box from '@material-ui/core/Box';
 import WarningIcon from '@material-ui/icons/Warning';
+import ErrorIcon from '@material-ui/icons/Error';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
@@ -207,7 +209,7 @@ export class BudgetsPage extends React.Component {
                         <Divider/>
                         { (!_.isEmpty(budgetData))
                             ? (
-                                <Grid container spacing={2}>
+                                <Grid container spacing={2} justify='center' align='center'>
                                     { Object.keys(budgetData).map((category) => {
                                             const catLevel = this.getCategoryLevel(category);
                                             return (
@@ -224,7 +226,12 @@ export class BudgetsPage extends React.Component {
                                                                 [classes.indicatorSuccess]: catLevel === "ok"
                                                             })}
                                                         >
-                                                            <WarningIcon />
+                                                            { (catLevel === "error")
+                                                                ? <ErrorIcon />
+                                                                : (catLevel === "warning")
+                                                                    ? <WarningIcon />
+                                                                    : <CheckBoxIcon />
+                                                            }
                                                         </Box>
                                                         <CardContent>
                                                             <Typography variant='h2'>{budgetData[category]}</Typography>
