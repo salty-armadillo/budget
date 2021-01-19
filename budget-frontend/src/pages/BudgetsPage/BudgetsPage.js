@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import axios from 'axios';
 import clsx from 'clsx';
+import _ from 'lodash';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -16,6 +17,10 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Box from '@material-ui/core/Box';
 import WarningIcon from '@material-ui/icons/Warning';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = (theme) => ({
     overlap: {
@@ -66,6 +71,13 @@ const styles = (theme) => ({
     },
     indicatorSuccess: {
         backgroundColor: theme.palette.success.light
+    },
+    timeframeSelect: {
+        minWidth: '8rem',
+        margin: '1rem'
+    },
+    noDataText: {
+        padding: '1rem'
     }
 })
 
@@ -77,16 +89,16 @@ export class BudgetsPage extends React.Component {
         this.length = 1;
 
         this.state = {
-            timeframe: "month",
+            timeframe: '',
             offset: 0,
             budgetData: [],
-            transactionData: []
+            transactionData: [],
         }
     }
 
     componentDidMount() {
-        this.getBudgetData();
-        this.getTransactionData();
+        // this.getBudgetData();
+        // this.getTransactionData();
     }
 
     getBudgetData = () => {
@@ -157,9 +169,20 @@ export class BudgetsPage extends React.Component {
         }
     }
 
+    onTimeframeChange = (e) => {
+        this.setState({ 
+            timeframe: e.target.value,
+            budgetData: [],
+            transactionData: []
+        }, () => {
+            this.getBudgetData();
+            this.getTransactionData();
+        })
+    }
+
     render() {
         const { classes } = this.props;
-        const { budgetData } = this.state;
+        const { budgetData, timeframe } = this.state;
 
         return (
             <React.Fragment>
@@ -171,34 +194,53 @@ export class BudgetsPage extends React.Component {
                     <Paper className={classes.paper}>
                         <Typography className={classes.title} variant='h6'>Budget</Typography>
                         <Divider/>
-                        <Grid container spacing={2}>
-                            { Object.keys(budgetData).map((category) => {
-                                const catLevel = this.getCategoryLevel(category);
-                                return (
-                                    <Grid item container xs={6} sm={4}>
-                                        <Card square elevation={3} className={clsx(classes.categoryCard, {
-                                                    [classes.categoryCardError]: catLevel === "error",
-                                                    [classes.categoryCardWarning]: catLevel === "warning",
-                                                    [classes.categoryCardSuccess]: catLevel === "ok"
-                                                })}>
-                                            <Box
-                                                className={clsx(classes.indicator, {
-                                                    [classes.indicatorError]: catLevel === "error",
-                                                    [classes.indicatorWarning]: catLevel === "warning",
-                                                    [classes.indicatorSuccess]: catLevel === "ok"
-                                                })}
-                                            >
-                                                <WarningIcon />
-                                            </Box>
-                                            <CardContent>
-                                                <Typography variant='h2'>{budgetData[category]}</Typography>
-                                                <Typography>{category}</Typography>
-                                            </CardContent>
-                                        </Card>
-                                    </Grid>
-                                )
-                            })}
+                        <Grid container justify={'flex-end'}>
+                            <FormControl className={classes.timeframeSelect}>
+                                <InputLabel>Timeframe</InputLabel>
+                                <Select id='timeframe-select' value={timeframe} onChange={this.onTimeframeChange}>
+                                    <MenuItem value={'week'}>Week</MenuItem>
+                                    <MenuItem value={'month'}>Month</MenuItem>
+                                    <MenuItem value={'year'}>Year</MenuItem>
+                                </Select>
+                            </FormControl>
                         </Grid>
+                        <Divider/>
+                        { (!_.isEmpty(budgetData))
+                            ? (
+                                <Grid container spacing={2}>
+                                    { Object.keys(budgetData).map((category) => {
+                                            const catLevel = this.getCategoryLevel(category);
+                                            return (
+                                                <Grid item container xs={6} sm={4}>
+                                                    <Card square elevation={3} className={clsx(classes.categoryCard, {
+                                                                [classes.categoryCardError]: catLevel === "error",
+                                                                [classes.categoryCardWarning]: catLevel === "warning",
+                                                                [classes.categoryCardSuccess]: catLevel === "ok"
+                                                            })}>
+                                                        <Box
+                                                            className={clsx(classes.indicator, {
+                                                                [classes.indicatorError]: catLevel === "error",
+                                                                [classes.indicatorWarning]: catLevel === "warning",
+                                                                [classes.indicatorSuccess]: catLevel === "ok"
+                                                            })}
+                                                        >
+                                                            <WarningIcon />
+                                                        </Box>
+                                                        <CardContent>
+                                                            <Typography variant='h2'>{budgetData[category]}</Typography>
+                                                            <Typography>{category}</Typography>
+                                                        </CardContent>
+                                                    </Card>
+                                                </Grid>
+                                            )
+                                        }) }
+                                </Grid>
+                            ) : (
+                                <Grid item className={classes.noDataText}>
+                                    <Typography>No data found</Typography>
+                                </Grid>
+                            )
+                        }
                     </Paper>
                 </Grid>
             </React.Fragment>

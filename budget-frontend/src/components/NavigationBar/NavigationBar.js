@@ -51,7 +51,6 @@ export class NavigationBar extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            
                         </Typography>
                         <Grid container justify={'flex-end'}>
                             <Button 
