@@ -91,7 +91,7 @@ export class BudgetsPage extends React.Component {
         this.length = 1;
 
         this.state = {
-            timeframe: '',
+            timeframe: 'month',
             offset: 0,
             budgetData: [],
             transactionData: [],
@@ -99,8 +99,8 @@ export class BudgetsPage extends React.Component {
     }
 
     componentDidMount() {
-        // this.getBudgetData();
-        // this.getTransactionData();
+        this.getBudgetData();
+        this.getTransactionData();
     }
 
     getBudgetData = () => {
@@ -138,7 +138,6 @@ export class BudgetsPage extends React.Component {
             axios
                 .get(url)
                 .then((response) => {
-                    console.log(response.data)
                     this.setState({
                         transactionData: response.data
                     })
@@ -200,9 +199,9 @@ export class BudgetsPage extends React.Component {
                             <FormControl className={classes.timeframeSelect}>
                                 <InputLabel>Timeframe</InputLabel>
                                 <Select id='timeframe-select' value={timeframe} onChange={this.onTimeframeChange}>
-                                    <MenuItem value={'week'}>Week</MenuItem>
-                                    <MenuItem value={'month'}>Month</MenuItem>
-                                    <MenuItem value={'year'}>Year</MenuItem>
+                                    <MenuItem key='timeframe-month' value={'week'}>Week</MenuItem>
+                                    <MenuItem key='timeframe-week' value={'month'}>Month</MenuItem>
+                                    <MenuItem key='timeframe-year' value={'year'}>Year</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -213,7 +212,7 @@ export class BudgetsPage extends React.Component {
                                     { Object.keys(budgetData).map((category) => {
                                             const catLevel = this.getCategoryLevel(category);
                                             return (
-                                                <Grid item container xs={6} sm={4}>
+                                                <Grid item container xs={6} sm={4} key={`${category}-category-card`}>
                                                     <Card square elevation={3} className={clsx(classes.categoryCard, {
                                                                 [classes.categoryCardError]: catLevel === "error",
                                                                 [classes.categoryCardWarning]: catLevel === "warning",
