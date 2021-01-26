@@ -23,6 +23,9 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = (theme) => ({
     overlap: {
@@ -80,6 +83,11 @@ const styles = (theme) => ({
     },
     noDataText: {
         padding: '1rem'
+    },
+    navigateButton: {
+        height: '3rem',
+        width: '3rem',
+        margin: '1rem 0'
     }
 })
 
@@ -92,6 +100,8 @@ export class BudgetsPage extends React.Component {
 
         this.state = {
             timeframe: 'month',
+            currTimeframeStart: moment().startOf('month').format('YYYY-MM-DD HH:mm:ss'),
+            currTimeframeEnd: moment().endOf('month').format('YYYY-MM-DD HH:mm:ss'),
             offset: 0,
             budgetData: [],
             transactionData: [],
@@ -104,10 +114,10 @@ export class BudgetsPage extends React.Component {
     }
 
     getBudgetData = () => {
-        const { timeframe } = this.state;
+        const { timeframe, currTimeframeStart, currTimeframeEnd } = this.state;
 
-        const start = moment().startOf(timeframe).format('YYYY-MM-DD HH:mm:ss');
-        const end = moment().endOf(timeframe).format('YYYY-MM-DD HH:mm:ss');
+        const start = currTimeframeStart;
+        const end = currTimeframeEnd;
 
         const url = `http://localhost:5000/budgetgoals/fetch?timeframe=${timeframe}&start=${start}&end=${end}`;
 
@@ -115,8 +125,9 @@ export class BudgetsPage extends React.Component {
             axios
                 .get(url)
                 .then((response) => {
+                    const data = (response.data.length > 0) ? JSON.parse(response.data[0] && response.data[0].goals) : response.data;
                     this.setState({
-                        budgetData: JSON.parse(response.data && response.data[0] && response.data[0].goals)
+                        budgetData: data
                     })
                 })
                 .catch((error) => {
@@ -127,10 +138,10 @@ export class BudgetsPage extends React.Component {
     }
 
     getTransactionData = () => {
-        const { timeframe } = this.state;
+        const { currTimeframeStart, currTimeframeEnd } = this.state;
 
-        const start = moment().startOf(timeframe).format('YYYY-MM-DD HH:mm:ss');
-        const end = moment().endOf(timeframe).format('YYYY-MM-DD HH:mm:ss');
+        const start = currTimeframeStart;
+        const end = currTimeframeEnd;
 
         const url = `http://localhost:5000/transactions/fetch?start=${start}&end=${end}`;
 
@@ -173,9 +184,31 @@ export class BudgetsPage extends React.Component {
     onTimeframeChange = (e) => {
         this.setState({ 
             timeframe: e.target.value,
+            currTimeframeStart: moment().startOf(e.target.value).format('YYYY-MM-DD HH:mm:ss'),
+            currTimeframeEnd: moment().endOf(e.target.value).format('YYYY-MM-DD HH:mm:ss'),
             budgetData: [],
             transactionData: []
         }, () => {
+            this.getBudgetData();
+            this.getTransactionData();
+        })
+    }
+
+    onNavBack = () => {
+        this.setState(prevState => ({
+            currTimeframeStart: moment(prevState.currTimeframeStart).subtract(1, this.state.timeframe).format('YYYY-MM-DD HH:mm:ss'),
+            currTimeframeEnd: moment(prevState.currTimeframeEnd).subtract(1, this.state.timeframe).format('YYYY-MM-DD HH:mm:ss')
+        }), () => {
+            this.getBudgetData();
+            this.getTransactionData();
+        })
+    }
+
+    onNavNext = () => {
+        this.setState(prevState => ({
+            currTimeframeStart: moment(prevState.currTimeframeStart).add(1, this.state.timeframe).format('YYYY-MM-DD HH:mm:ss'),
+            currTimeframeEnd: moment(prevState.currTimeframeEnd).add(1, this.state.timeframe).format('YYYY-MM-DD HH:mm:ss')
+        }), () => {
             this.getBudgetData();
             this.getTransactionData();
         })
@@ -204,6 +237,12 @@ export class BudgetsPage extends React.Component {
                                     <MenuItem key='timeframe-year' value={'year'}>Year</MenuItem>
                                 </Select>
                             </FormControl>
+                            <IconButton className={classes.navigateButton} onClick={this.onNavBack}>
+                                <NavigateBeforeIcon />
+                            </IconButton>
+                            <IconButton className={classes.navigateButton} onClick={this.onNavNext}>
+                                <NavigateNextIcon />
+                            </IconButton>
                         </Grid>
                         <Divider/>
                         { (!_.isEmpty(budgetData))
