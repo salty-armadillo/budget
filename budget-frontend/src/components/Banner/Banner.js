@@ -7,8 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import PaymentIcon from '@material-ui/icons/Payment';
+import AddIcon from '@material-ui/icons/Add';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,6 +21,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 
 const styles = (theme) => ({
     banner: {
@@ -32,7 +32,7 @@ const styles = (theme) => ({
         height: '100%'
     },
     button: {
-        backgroundColor: "#ffffff",
+        backgroundColor: theme.palette.secondary.main,
         '&:hover': {
             backgroundColor: theme.palette.secondary.light
         }
@@ -57,12 +57,17 @@ export class Banner extends React.Component {
             description: '',
             category: '',
             addTransactionError: false,
-            isAddTransactionLoading: false
+            isAddTransactionLoading: false,
+            isAddGoalOpen: false
         };
     }
 
     toggleAddTransaction = () => {
         this.setState({ isAddTransactionOpen: !this.state.isAddTransactionOpen });
+    }
+
+    toggleAddGoal = () => {
+        this.setState({ isAddGoalOpen: !this.state.isAddGoalOpen });
     }
 
     handleChange = (field) => (e) => {
@@ -121,23 +126,32 @@ export class Banner extends React.Component {
             description,
             category,
             addTransactionError,
-            isAddTransactionLoading
+            isAddTransactionLoading,
+            isAddGoalOpen,
+            addGoalError
         } = this.state;
 
         return (
             <React.Fragment>
                 <Paper className={classes.banner} square elevation={0}>
-                    <Grid container className={classes.grid}>
-                        <Grid item xs={4}>
-
+                    <Grid container className={classes.grid} spacing={2}>
+                        <Grid item container xs={6} direction='column' justify='center' alignContent='flex-end'>
+                            <Button 
+                                className={classes.button}
+                                onClick={this.toggleAddTransaction}
+                                startIcon={<AddIcon />}
+                            >
+                                <Typography> Add transaction</Typography>
+                            </Button>
                         </Grid>
-                        <Grid item container xs={4} direction='column' justify='center' alignContent='center'>
-                            <IconButton className={classes.button} onClick={this.toggleAddTransaction}>
-                                <PaymentIcon fontSize={'large'}/>
-                            </IconButton>
-                        </Grid>
-                        <Grid item xs={4}>
-                            
+                        <Grid item container xs={6} direction='column' justify='center' alignContent='flex-start'>
+                            <Button 
+                                className={classes.button}
+                                onClick={this.toggleAddGoal}
+                                startIcon={<AddIcon />}
+                            >
+                                <Typography> Add goal</Typography>
+                            </Button>
                         </Grid>
                     </Grid>
                 </Paper>
@@ -207,6 +221,25 @@ export class Banner extends React.Component {
                     open={addTransactionError}
                     onClose={() => { this.setState({ addTransactionError: false })}}
                     message="An error has occurred whilst adding a transaction. Please try again."
+                    autoHideDuration={2000}
+                />
+                <Dialog open={isAddGoalOpen} onClose={this.toggleAddGoal} maxWidth='md' fullWidth>
+                    <DialogTitle>Add a goal</DialogTitle>
+                    <DialogContent>
+                        
+                    </DialogContent>
+                    <DialogActions>
+                        
+                    </DialogActions>
+                </Dialog>
+                <Snackbar
+                    ContentProps={{
+                        classes: { root: classes.error }
+                    }}
+                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                    open={addGoalError}
+                    onClose={() => { this.setState({ addGoalError: false })}}
+                    message="An error has occurred whilst adding a goal. Please try again."
                     autoHideDuration={2000}
                 />
             </React.Fragment>
