@@ -22,6 +22,8 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = (theme) => ({
     banner: {
@@ -32,9 +34,14 @@ const styles = (theme) => ({
         height: '100%'
     },
     button: {
-        backgroundColor: theme.palette.secondary.main,
+        textTransform: 'none',
+        backgroundColor: 'rgba(211, 219, 217, 0.6)',
+        borderRadius: '1.5rem',
+        padding: '0.5rem 2rem',
+        border: 'solid 0.1rem',
+        borderColor: theme.palette.secondary.dark,
         '&:hover': {
-            backgroundColor: theme.palette.secondary.light
+            backgroundColor: 'rgba(211, 219, 217, 1)'
         }
     },
     dialog: {
@@ -117,18 +124,26 @@ export class Banner extends React.Component {
 
     }
 
+    addGoal = () => {
+
+    }
+
     render() {
         const { classes } = this.props;
         const {
             isAddTransactionOpen,
             transactionValue,
-            date,
+            transactionDate,
             description,
             category,
             addTransactionError,
             isAddTransactionLoading,
             isAddGoalOpen,
-            addGoalError
+            addGoalError,
+            isAddGoalLoading,
+            goalDate,
+            goalTimeframe,
+            goals
         } = this.state;
 
         return (
@@ -139,18 +154,16 @@ export class Banner extends React.Component {
                             <Button 
                                 className={classes.button}
                                 onClick={this.toggleAddTransaction}
-                                startIcon={<AddIcon />}
                             >
-                                <Typography> Add transaction</Typography>
+                                <Typography variant='h5'>Add Transaction</Typography>
                             </Button>
                         </Grid>
                         <Grid item container xs={6} direction='column' justify='center' alignContent='flex-start'>
                             <Button 
                                 className={classes.button}
                                 onClick={this.toggleAddGoal}
-                                startIcon={<AddIcon />}
                             >
-                                <Typography> Add goal</Typography>
+                                <Typography variant='h5'>Add Goal</Typography>
                             </Button>
                         </Grid>
                     </Grid>
@@ -164,8 +177,8 @@ export class Banner extends React.Component {
                                     <DateTimePicker
                                         label="Date"
                                         inputVariant="outlined"
-                                        value={date}
-                                        onChange={this.handleChange('date')}
+                                        value={transactionDate}
+                                        onChange={this.handleChange('transactionDate')}
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
@@ -226,10 +239,46 @@ export class Banner extends React.Component {
                 <Dialog open={isAddGoalOpen} onClose={this.toggleAddGoal} maxWidth='md' fullWidth>
                     <DialogTitle>Add a goal</DialogTitle>
                     <DialogContent>
-                        
+                        <Grid container spacing={2} className={classes.dialog}>
+                            <Grid item container spacing={2}>
+                                <Grid item xs={6}>
+                                    <DateTimePicker
+                                        label="Start date"
+                                        inputVariant="outlined"
+                                        value={goalDate}
+                                        onChange={this.handleChange('date')}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth className={classes.margin}>
+                                        <InputLabel>Timeframe</InputLabel>
+                                        <Select
+                                            id="goal-timeframe-select"
+                                            value={goalTimeframe}
+                                            onChange={this.handleChange('goalTimeframe')}
+                                            >
+                                            <MenuItem value={"week"}>Week</MenuItem>
+                                            <MenuItem value={"month"}>Month</MenuItem>
+                                            <MenuItem value={"year"}>Year</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </DialogContent>
                     <DialogActions>
-                        
+                        <Button disabled={isAddGoalLoading} onClick={this.toggleAddGoal}>
+                            Cancel
+                        </Button>
+                        { isAddGoalLoading 
+                            ? (
+                                <CircularProgress size={'1rem'} />
+                            ) : (
+                                <Button color='primary' onClick={this.addGoal}>
+                                    Add
+                                </Button>
+                            )
+                        }
                     </DialogActions>
                 </Dialog>
                 <Snackbar
