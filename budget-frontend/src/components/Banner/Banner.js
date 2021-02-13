@@ -5,6 +5,8 @@ import axios from 'axios';
 
 import { withStyles } from '@material-ui/core/styles';
 
+import { EditableTable } from '../EditableTable';
+
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
@@ -263,6 +265,20 @@ export class Banner extends React.Component {
                                         </Select>
                                     </FormControl>
                                 </Grid>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <EditableTable
+                                    columns={["Goal", "Goal Value"]}
+                                    data={
+                                        {
+                                            "food": 100,
+                                            "games": 20,
+                                            "clothes": 50,
+                                            "transport": 30,
+                                            "utilities": 75
+                                        }
+                                    }
+                                />
                             </Grid>
                         </Grid>
                     </DialogContent>
