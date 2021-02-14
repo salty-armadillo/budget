@@ -103,8 +103,10 @@ export class EditableTable extends React.Component {
                                         key={`${i}-goal`}
                                         label="Goal"
                                         variant="outlined"
+                                        fullWidth
                                         value={row}
                                         onChange={this.onGoalChange(row)}
+                                        required
                                     />
                                 </TableCell>
                                 <TableCell align="center">
@@ -113,8 +115,10 @@ export class EditableTable extends React.Component {
                                         key={`${i}-value`}
                                         label="Goal value"
                                         variant="outlined"
+                                        fullWidth
                                         value={data[row]}
                                         onChange={this.onGoalValueChange(row)}
+                                        required
                                     />
                                 </TableCell>
                                 <TableCell align="right">
@@ -127,7 +131,7 @@ export class EditableTable extends React.Component {
                         <TableRow key="add-new-row">
                             <TableCell align="center" colSpan={columns.length + 1}>
                                 <Button onClick={this.onRowAdd}>
-                                    Add a new goal
+                                    Add a new goal category
                                 </Button>
                             </TableCell>
                         </TableRow>

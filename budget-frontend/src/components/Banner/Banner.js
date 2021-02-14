@@ -183,6 +183,7 @@ export class Banner extends React.Component {
                                         inputVariant="outlined"
                                         value={transactionDate}
                                         onChange={this.handleChange('transactionDate')}
+                                        required
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
@@ -193,6 +194,7 @@ export class Banner extends React.Component {
                                             value={transactionValue}
                                             onChange={this.handleChange('transactionValue')}
                                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                            required
                                         />
                                     </FormControl>
                                 </Grid>
@@ -203,6 +205,7 @@ export class Banner extends React.Component {
                                     fullWidth
                                     value={description}
                                     onChange={this.handleChange('description')}
+                                    required
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -211,6 +214,7 @@ export class Banner extends React.Component {
                                     fullWidth
                                     value={category}
                                     onChange={this.handleChange('category')}
+                                    required
                                 />
                             </Grid>
                         </Grid>
@@ -251,6 +255,7 @@ export class Banner extends React.Component {
                                         inputVariant="outlined"
                                         value={goalDate}
                                         onChange={this.handleChange('date')}
+                                        required
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
@@ -260,6 +265,7 @@ export class Banner extends React.Component {
                                             id="goal-timeframe-select"
                                             value={goalTimeframe}
                                             onChange={this.handleChange('goalTimeframe')}
+                                            required
                                             >
                                             <MenuItem value={"week"}>Week</MenuItem>
                                             <MenuItem value={"month"}>Month</MenuItem>
