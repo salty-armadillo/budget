@@ -9,7 +9,6 @@ import { EditableTable } from '../EditableTable';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import AddIcon from '@material-ui/icons/Add';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -90,12 +89,12 @@ export class Banner extends React.Component {
 
     addTransaction = () => {
         const { fetchTransactions } = this.props;
-        const { date, transactionValue, description, category } = this.state;
+        const { transactionDate, transactionValue, description, category } = this.state;
 
         this.setState({ isAddTransactionLoading: true });
 
         const payload = {
-            date: moment(date).format('YYYY-MM-DD HH:mm:ss'),
+            date: moment(transactionDate).format('YYYY-MM-DD HH:mm:ss'),
             amount: transactionValue,
             description: description,
             category: category
@@ -108,7 +107,7 @@ export class Banner extends React.Component {
                 .post(url, payload)
                 .then(() => {
                     this.setState({
-                        date: moment(),
+                        transactionDate: moment(),
                         transactionValue: '',
                         description: '',
                         category: '',
@@ -126,7 +125,54 @@ export class Banner extends React.Component {
                     })
                 })
         )
+    }
 
+    addGoal = () => {
+        const { fetchBudgetData } = this.props;
+        const { goalDate, goals, goalTimeframe } = this.state;
+
+        this.setState({ isAddGoalLoading: true });
+
+        const payload = {
+            date: moment(goalDate).format('YYYY-MM-DD HH:mm:ss'),
+            timeframe: goalTimeframe,
+            goals: this.formatGoals(goals)
+        }
+
+        const url = "http://localhost:5000/budgetgoals/add";
+
+        return (
+            axios
+                .post(url, payload)
+                .then(() => {
+                    this.setState({
+                        goalDate: moment(),
+                        timeframe: '',
+                        goals: [],
+                        isAddGoalOpen: false
+                    }, fetchBudgetData)
+                })
+                .catch(() => {
+                    this.setState({
+                        addGoalError: true
+                    })
+                })
+                .finally(() => {
+                    this.setState({
+                        isAddGoalLoading: false
+                    })
+                })
+        )
+    }
+
+    formatGoals = (goals) => {
+        const formattedGoals = {};
+
+        goals.forEach((goal) => {
+            formattedGoals[goal["Goal"]] = parseFloat(goal["Goal Value"])
+        })
+
+        return formattedGoals;
     }
 
     onGoalChange = (goalIndex) => (e) => {
@@ -349,7 +395,8 @@ export class Banner extends React.Component {
 
 Banner.propTypes = {
     classes: PropTypes.object,
-    fetchTransactions: PropTypes.func
+    fetchTransactions: PropTypes.func,
+    fetchBudgetData: PropTypes.func
 }
 
 Banner.defaultProps = {

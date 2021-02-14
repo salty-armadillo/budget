@@ -62,7 +62,6 @@ export class EditableTable extends React.Component {
                         {data.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
                                 {columns.map((column, colIndex) => {
-                                    console.log(row, column)
                                     return (
                                         <TableCell component="th" scope="row" align="center">
                                             <TextField
