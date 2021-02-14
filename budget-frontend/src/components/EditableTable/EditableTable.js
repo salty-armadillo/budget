@@ -16,7 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-const styles = (theme) => ({
+const styles = () => ({
     tableHeadings: {
         fontWeight: "bold"
     }
@@ -27,47 +27,11 @@ export class EditableTable extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            data: {}
-        }
-    }
-
-    onGoalChange = (goal) => (e) => {
-        const { data } = this.state;
-        const newGoalName = e.target.value;
-
-        delete Object.assign(data, {[newGoalName]: data[goal] })[goal];
-
-        this.setState({ data });
-    }
-
-    onGoalValueChange = (goal) => (e) => {
-        const { data } = this.state;
-
-        data[goal] = e.target.value;
-
-        this.setState({ data });
-    }
-
-    onRowAdd = () => {
-        this.setState({
-            data: {
-                ...this.state.data,
-                "": ""
-            }
-        })
-    }
-
-    onRowDelete = (goal) => {
-        const { data } = this.state;
-
-        delete data[goal];
-        this.setState({ data });
+        this.state = {}
     }
 
     render() {
-        const { classes, columns } = this.props;
-        const { data } = this.state;
+        const { classes, columns, onChangeFuncs, onRowAdd, onRowDelete, data } = this.props;
 
         const colWidth = `${String(90/(columns.length))}%`;
 
@@ -95,34 +59,27 @@ export class EditableTable extends React.Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {Object.keys(data).map((row, i) => (
-                            <TableRow key={i}>
-                                <TableCell component="th" scope="row" align="center">
-                                    <TextField
-                                        id={`${i}-goal`}
-                                        key={`${i}-goal`}
-                                        label="Goal"
-                                        variant="outlined"
-                                        fullWidth
-                                        value={row}
-                                        onChange={this.onGoalChange(row)}
-                                        required
-                                    />
-                                </TableCell>
-                                <TableCell align="center">
-                                    <TextField
-                                        id={`${i}-value`}
-                                        key={`${i}-value`}
-                                        label="Goal value"
-                                        variant="outlined"
-                                        fullWidth
-                                        value={data[row]}
-                                        onChange={this.onGoalValueChange(row)}
-                                        required
-                                    />
-                                </TableCell>
+                        {data.map((row, rowIndex) => (
+                            <TableRow key={rowIndex}>
+                                {columns.map((column, colIndex) => {
+                                    console.log(row, column)
+                                    return (
+                                        <TableCell component="th" scope="row" align="center">
+                                            <TextField
+                                                id={`row${rowIndex}-col${colIndex}`}
+                                                key={`row${rowIndex}-col${colIndex}`}
+                                                label={column}
+                                                variant="outlined"
+                                                fullWidth
+                                                value={row[column] ? row[column] : ""}
+                                                onChange={onChangeFuncs[colIndex](rowIndex)}
+                                                required
+                                            />
+                                        </TableCell>
+                                    )
+                                })}
                                 <TableCell align="right">
-                                    <IconButton onClick={() => { this.onRowDelete(row) }}>
+                                    <IconButton onClick={() => { onRowDelete(rowIndex) }}>
                                         <ClearIcon />
                                     </IconButton>
                                 </TableCell>
@@ -130,7 +87,7 @@ export class EditableTable extends React.Component {
                         ))}
                         <TableRow key="add-new-row">
                             <TableCell align="center" colSpan={columns.length + 1}>
-                                <Button onClick={this.onRowAdd}>
+                                <Button onClick={onRowAdd}>
                                     Add a new goal category
                                 </Button>
                             </TableCell>
@@ -145,12 +102,16 @@ export class EditableTable extends React.Component {
 
 EditableTable.propTypes = {
     classes: PropTypes.object,
-    columns: PropTypes.array
+    data: PropTypes.array,
+    columns: PropTypes.array,
+    onChangeFuncs: PropTypes.array.isRequired,
+    onRowAdd: PropTypes.func.isRequired,
+    onRowDelete: PropTypes.func.isRequired
 }
 
 EditableTable.defaultProps = {
     classes: {},
-    data: {},
+    data: [],
     columns: []
 }
 

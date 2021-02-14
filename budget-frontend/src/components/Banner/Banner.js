@@ -69,7 +69,8 @@ export class Banner extends React.Component {
             isAddTransactionLoading: false,
             isAddGoalOpen: false,
             goalDate: moment(),
-            goalTimeframe: ''
+            goalTimeframe: '',
+            goals: []
         };
     }
 
@@ -128,8 +129,38 @@ export class Banner extends React.Component {
 
     }
 
-    addGoal = () => {
+    onGoalChange = (goalIndex) => (e) => {
+        const { goals } = this.state;
 
+        goals[goalIndex]["Goal"] = e.target.value;
+        this.setState({ goals });
+    }
+
+    onGoalValueChange = (goalIndex) => (e) => {
+        const { goals } = this.state;
+
+        goals[goalIndex]["Goal Value"] = e.target.value;
+
+        this.setState({ goals });
+    }
+
+    onGoalRowAdd = () => {
+        this.setState({
+            goals: [
+                ...this.state.goals,
+                {
+                    "Goal": "",
+                    "Goal Value": ""
+                }
+            ]
+        })
+    }
+
+    onGoalRowDelete = (index) => {
+        const { goals } = this.state;
+
+        goals.splice(index, 1);
+        this.setState({ goals });
     }
 
     render() {
@@ -276,7 +307,11 @@ export class Banner extends React.Component {
                             </Grid>
                             <Grid item xs={12}>
                                 <EditableTable
+                                    data={goals}
                                     columns={["Goal", "Goal Value"]}
+                                    onChangeFuncs={[this.onGoalChange, this.onGoalValueChange]}
+                                    onRowAdd={this.onGoalRowAdd}
+                                    onRowDelete={this.onGoalRowDelete}
                                 />
                             </Grid>
                         </Grid>
