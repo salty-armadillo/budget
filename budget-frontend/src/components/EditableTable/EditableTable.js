@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,10 +13,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ClearIcon from '@material-ui/icons/Clear';
 import IconButton from '@material-ui/core/IconButton';
-
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 const styles = (theme) => ({
-
+    tableHeadings: {
+        fontWeight: "bold"
+    }
 })
 
 export class EditableTable extends React.Component {
@@ -26,6 +30,15 @@ export class EditableTable extends React.Component {
         this.state = {
             data: this.props.data
         }
+    }
+
+    onGoalChange = (goal) => (e) => {
+        const { data } = this.state;
+        const newGoalName = e.target.value;
+
+        delete Object.assign(data, {[newGoalName]: data[goal] })[goal];
+
+        this.setState({ data });
     }
 
     render() {
@@ -49,7 +62,9 @@ export class EditableTable extends React.Component {
                         <TableRow>
                             {columns.map((column) => {
                                 return (
-                                    <TableCell align="center">{column}</TableCell>
+                                    <TableCell align="center">
+                                        <Typography className={classes.tableHeadings} variant='subtitle1'>{column}</Typography>
+                                    </TableCell>
                                 )
                             })}
                             <TableCell />
@@ -57,18 +72,38 @@ export class EditableTable extends React.Component {
                     </TableHead>
                     <TableBody>
                         {Object.keys(data).map((row) => (
-                        <TableRow key={row}>
-                            <TableCell component="th" scope="row" align="center">
-                                {row}
-                            </TableCell>
-                            <TableCell align="center">{data[row]}</TableCell>
-                            <TableCell align="right">
-                                <IconButton>
-                                    <ClearIcon />
-                                </IconButton>
+                            <TableRow key={row}>
+                                <TableCell component="th" scope="row" align="center">
+                                    <TextField
+                                        id={`${row}-goal`}
+                                        label="Goal"
+                                        variant="outlined"
+                                        value={row}
+                                        onChange={this.onGoalChange(row)}
+                                    />
+                                </TableCell>
+                                <TableCell align="center">
+                                    <TextField
+                                        id={`${row}-value`}
+                                        label="Goal value"
+                                        variant="outlined"
+                                        value={data[row]}
+                                    />
+                                </TableCell>
+                                <TableCell align="right">
+                                    <IconButton>
+                                        <ClearIcon />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                        <TableRow key="add-new-row">
+                            <TableCell align="center" colSpan={columns.length + 1}>
+                                <Button>
+                                    Add a new goal
+                                </Button>
                             </TableCell>
                         </TableRow>
-                        ))}
                     </TableBody>
                 </Table>
           </TableContainer>

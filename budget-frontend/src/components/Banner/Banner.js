@@ -62,12 +62,14 @@ export class Banner extends React.Component {
         this.state = {
             isAddTransactionOpen: false,
             transactionValue: '',
-            date: moment(),
+            transactionDate: moment(),
             description: '',
             category: '',
             addTransactionError: false,
             isAddTransactionLoading: false,
-            isAddGoalOpen: false
+            isAddGoalOpen: false,
+            goalDate: moment(),
+            goalTimeframe: ''
         };
     }
 
