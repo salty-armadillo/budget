@@ -28,7 +28,7 @@ export class EditableTable extends React.Component {
         super(props);
 
         this.state = {
-            data: this.props.data
+            data: {}
         }
     }
 
@@ -38,6 +38,30 @@ export class EditableTable extends React.Component {
 
         delete Object.assign(data, {[newGoalName]: data[goal] })[goal];
 
+        this.setState({ data });
+    }
+
+    onGoalValueChange = (goal) => (e) => {
+        const { data } = this.state;
+
+        data[goal] = e.target.value;
+
+        this.setState({ data });
+    }
+
+    onRowAdd = () => {
+        this.setState({
+            data: {
+                ...this.state.data,
+                "": ""
+            }
+        })
+    }
+
+    onRowDelete = (goal) => {
+        const { data } = this.state;
+
+        delete data[goal];
         this.setState({ data });
     }
 
@@ -71,11 +95,12 @@ export class EditableTable extends React.Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {Object.keys(data).map((row) => (
-                            <TableRow key={row}>
+                        {Object.keys(data).map((row, i) => (
+                            <TableRow key={i}>
                                 <TableCell component="th" scope="row" align="center">
                                     <TextField
-                                        id={`${row}-goal`}
+                                        id={`${i}-goal`}
+                                        key={`${i}-goal`}
                                         label="Goal"
                                         variant="outlined"
                                         value={row}
@@ -84,14 +109,16 @@ export class EditableTable extends React.Component {
                                 </TableCell>
                                 <TableCell align="center">
                                     <TextField
-                                        id={`${row}-value`}
+                                        id={`${i}-value`}
+                                        key={`${i}-value`}
                                         label="Goal value"
                                         variant="outlined"
                                         value={data[row]}
+                                        onChange={this.onGoalValueChange(row)}
                                     />
                                 </TableCell>
                                 <TableCell align="right">
-                                    <IconButton>
+                                    <IconButton onClick={() => { this.onRowDelete(row) }}>
                                         <ClearIcon />
                                     </IconButton>
                                 </TableCell>
@@ -99,7 +126,7 @@ export class EditableTable extends React.Component {
                         ))}
                         <TableRow key="add-new-row">
                             <TableCell align="center" colSpan={columns.length + 1}>
-                                <Button>
+                                <Button onClick={this.onRowAdd}>
                                     Add a new goal
                                 </Button>
                             </TableCell>
@@ -114,7 +141,6 @@ export class EditableTable extends React.Component {
 
 EditableTable.propTypes = {
     classes: PropTypes.object,
-    data: PropTypes.object,
     columns: PropTypes.array
 }
 

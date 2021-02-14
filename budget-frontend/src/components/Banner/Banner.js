@@ -271,15 +271,6 @@ export class Banner extends React.Component {
                             <Grid item xs={12}>
                                 <EditableTable
                                     columns={["Goal", "Goal Value"]}
-                                    data={
-                                        {
-                                            "food": 100,
-                                            "games": 20,
-                                            "clothes": 50,
-                                            "transport": 30,
-                                            "utilities": 75
-                                        }
-                                    }
                                 />
                             </Grid>
                         </Grid>
